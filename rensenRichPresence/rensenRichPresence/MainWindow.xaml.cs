@@ -56,18 +56,17 @@ namespace rensenRichPresence
                         if (System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ko")
                         {
                             discord.SetPresence(new RichPresence()
-                            {
-                                Details = "점수: " + score,
-                                State = "스펠: " + bombs + ", 잔기: " + lifes + " 난이도: " + RensenNegotiation.Difficulty2String(difficulty)
-                                + "\n영력: "+power
+                            { 
+                                Details = "점수: " + score + ", 난이도: " + RensenNegotiation.Difficulty2String(difficulty),
+                                State = "스펠: " + bombs + ", 잔기: " + lifes + ", 영력: "+power
                             });
                         }
                         else
                         {
                             discord.SetPresence(new RichPresence()
                             {
-                                Details = "Score: " + score,
-                                State = "spells: " + bombs + ", lifes:" + lifes + " level:" + RensenNegotiation.Difficulty2String(difficulty)+"\n power:" + power
+                                Details = "Score: " + score + ", level:" + RensenNegotiation.Difficulty2String(difficulty),
+                                State = "spells: " + bombs + ", lifes:" + lifes + " power:" + power
                             });
                         }
 
@@ -150,7 +149,7 @@ namespace rensenRichPresence
                                 output = "점수:" + score
                                 + ",\n 라이프:" + lifes
                                 + ", 스펠:" + bombs
-                                + ", 영력:" + RensenNegotiation.ReadPowerPellets()
+                                + ",\n 영력:" + RensenNegotiation.ReadPowerPellets()
                                 + ", 난이도:" + RensenNegotiation.Difficulty2String(difficulty);
                             }
                             else
@@ -312,7 +311,7 @@ namespace rensenRichPresence
                     return 0;
                 }
 
-                return BitConverter.ToInt32(_buffer, 0) / 100;
+                return BitConverter.ToInt32(_buffer, 0) / 100f;
             }
             else
             {

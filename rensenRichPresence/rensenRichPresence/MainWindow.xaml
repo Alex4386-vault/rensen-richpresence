@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:rensenRichPresence"
         mc:Ignorable="d"
         Closing="MainWindow_Closing"
-        Title="RensenRichPresenece" Height="292" Width="310" ResizeMode="NoResize">
+        Title="RensenRichPresenece" Height="271.334" Width="310" ResizeMode="NoResize">
     <Grid>
         <TextBlock x:Name="explainLabel" HorizontalAlignment="Left" Height="51" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280"><Run Text="This software will forward your game data to discord richpresence via accessing game data via "/><Run Text="direct "/><Run Text="memory accessing."/></TextBlock>
         <Label x:Name="rensenDetected" Content="Program is Loading..." HorizontalAlignment="Left" Height="29" Margin="10,78,0,0" VerticalAlignment="Top" Width="280"/>
-        <Label x:Name="scoreLabel" Content="GameInfo" HorizontalAlignment="Left" Height="52" Margin="10,164,0,0" VerticalAlignment="Top" Width="280"/>
+        <Label x:Name="scoreLabel" Content="GameInfo" HorizontalAlignment="Left" Height="63" Margin="10,137,0,0" VerticalAlignment="Top" Width="280"/>
         <ProgressBar x:Name="rensenMeter" HorizontalAlignment="Left" Height="20" Margin="10,112,0,0" VerticalAlignment="Top" Width="273"/>
-        <ProgressBar x:Name="discordMeter" HorizontalAlignment="Left" Height="19" Margin="10,221,0,0" VerticalAlignment="Top" Width="273"/>
+        <ProgressBar x:Name="discordMeter" HorizontalAlignment="Left" Height="19" Margin="10,205,0,0" VerticalAlignment="Top" Width="273"/>
 
     </Grid>
 </Window>
