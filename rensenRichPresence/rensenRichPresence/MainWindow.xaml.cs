@@ -126,11 +126,11 @@ namespace rensenRichPresence
                         }
                     }
                     discord.Invoke();
-                    for (int i = 1; i <= 10; i++)
+                    for (int i = 1; i <= 1000; i++)
                     {
                         Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
-                        { discordMeter.Value = i * 10; }));
-                        Thread.Sleep(Config.Discord.discordSyncMS/10);
+                        { discordMeter.Value = i/10; }));
+                        Thread.Sleep(Config.Discord.discordSyncMS/1000);
                     }
                     Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
                     { discordMeter.Value = 0; }));
@@ -231,7 +231,14 @@ namespace rensenRichPresence
 
         private void DiscordSyncSetter_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            DiscordSyncReq.Content = (int)discordSyncSetter.Value;
+            if (System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ko")
+            {
+                DiscordSyncReq.Content = (int)discordSyncSetter.Value + " (" + (float)(int)discordSyncSetter.Value / 1000f + " 초)";
+            } else
+            {
+                DiscordSyncReq.Content = (int)discordSyncSetter.Value + " (" + (float)(int)discordSyncSetter.Value / 1000f + " second)";
+            }
+                
             Config.Discord.discordSyncMS = (int)discordSyncSetter.Value;
 
         }

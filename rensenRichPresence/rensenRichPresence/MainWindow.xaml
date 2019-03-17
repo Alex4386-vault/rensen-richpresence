@@ -14,7 +14,7 @@
         <ProgressBar x:Name="rensenMeter" HorizontalAlignment="Left" Height="20" Margin="10,112,0,0" VerticalAlignment="Top" Width="273"/>
         <ProgressBar x:Name="discordMeter" HorizontalAlignment="Left" Height="19" Margin="10,205,0,0" VerticalAlignment="Top" Width="273"/>
         <Label Content="DiscordSyncRequest:" HorizontalAlignment="Left" Margin="10,235,0,0" VerticalAlignment="Top" Width="127"/>
-        <Label x:Name="DiscordSyncReq" HorizontalAlignment="Left" Margin="137,235,0,65" Content="15000" Width="49"/>
+        <Label x:Name="DiscordSyncReq" HorizontalAlignment="Left" Margin="137,235,0,65" Content="15000" Width="146"/>
         <Slider x:Name="discordSyncSetter" HorizontalAlignment="Left" Margin="10,274,0,0" VerticalAlignment="Top" Width="273" Minimum="15000" Maximum="60000" ValueChanged="DiscordSyncSetter_ValueChanged" Value="20000"/>
         <Label x:Name="realtimeExplain" Content="&lt;- REALTIME" HorizontalAlignment="Left" Height="26" Margin="17,291,0,0" VerticalAlignment="Top" Width="92"/>
         <Label x:Name="stableExplain" Content="STABLE -&gt;" HorizontalAlignment="Left" Height="26" Margin="199,291,0,0" VerticalAlignment="Top" Width="77"/>
