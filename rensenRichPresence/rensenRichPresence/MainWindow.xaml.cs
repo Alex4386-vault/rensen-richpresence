@@ -19,6 +19,7 @@ using System.Threading;
 using System.Windows.Threading;
 using System.ComponentModel;
 using DiscordRPC.Logging;
+using System.Text.RegularExpressions;
 
 namespace rensenRichPresence
 {
@@ -33,6 +34,41 @@ namespace rensenRichPresence
         public Thread discordUpdater;
 
         public static DiscordRpcClient discord;
+        
+
+        void discordHandshake()
+        {
+            if (RensenNegotiation.isRensenDetected)
+            {
+                if (!RensenNegotiation.AmIDead())
+                {
+                    int score = RensenNegotiation.ReadScore();
+                    int lifes = RensenNegotiation.ReadLifes();
+                    int bombs = RensenNegotiation.ReadBombs();
+                    float power = RensenNegotiation.ReadPowerPellets();
+                    RensenNegotiation.Difficulty difficulty = RensenNegotiation.ReadDifficulty();
+
+                    if (System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ko")
+                    {
+                        discord.SetPresence(new RichPresence()
+                        {
+                            Details = "점수: " + score + ", 난이도: " + RensenNegotiation.Difficulty2String(difficulty),
+                            State = "스펠: " + bombs + ", 잔기: " + lifes + ", 영력: " + power
+                        });
+                    }
+                    else
+                    {
+                        discord.SetPresence(new RichPresence()
+                        {
+                            Details = "Score: " + score + ", level:" + RensenNegotiation.Difficulty2String(difficulty),
+                            State = "spells: " + bombs + ", lifes:" + lifes + " power:" + power
+                        });
+                    }
+                }
+                discord.UpdateStartTime();
+            }
+        }
+
 
         void DiscordInit()
         {
@@ -46,6 +82,13 @@ namespace rensenRichPresence
             {
                 if (RensenNegotiation.isRensenDetected)
                 {
+                    if (!RensenNegotiation.wasRensenDetected)
+                    {
+                        DiscordInit();
+                        discordHandshake();
+                        RensenNegotiation.wasRensenDetected = true;
+                    }
+
                     if (!RensenNegotiation.AmIDead())
                     {
                         int score = RensenNegotiation.ReadScore();
@@ -55,20 +98,16 @@ namespace rensenRichPresence
                         RensenNegotiation.Difficulty difficulty = RensenNegotiation.ReadDifficulty();
                         if (System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ko")
                         {
-                            discord.SetPresence(new RichPresence()
-                            { 
-                                Details = "점수: " + score + ", 난이도: " + RensenNegotiation.Difficulty2String(difficulty),
-                                State = "스펠: " + bombs + ", 잔기: " + lifes + ", 영력: "+power
-                            });
+                            discord.UpdateDetails("점수: " + score + ", 난이도: " + RensenNegotiation.Difficulty2String(difficulty));
+                            discord.UpdateState("스펠: " + bombs + ", 잔기: " + lifes + ", 영력: " + power);
+                   
                         }
                         else
                         {
-                            discord.SetPresence(new RichPresence()
-                            {
-                                Details = "Score: " + score + ", level:" + RensenNegotiation.Difficulty2String(difficulty),
-                                State = "spells: " + bombs + ", lifes:" + lifes + " power:" + power
-                            });
+                            discord.UpdateDetails("Score: " + score + ", level:" + RensenNegotiation.Difficulty2String(difficulty));
+                            discord.UpdateState("spells: " + bombs + ", lifes:" + lifes + " power:" + power);
                         }
+                        
 
                     }
                     else
@@ -77,19 +116,16 @@ namespace rensenRichPresence
                         RensenNegotiation.Difficulty difficulty = RensenNegotiation.ReadDifficulty();
                         if (System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ko")
                         {
-                            discord.SetPresence(new RichPresence()
-                            {
-                                Details = "어, 나 쥬금. 점수:" + score + " @ " + RensenNegotiation.Difficulty2String(difficulty)
-                            });
+                            discord.UpdateDetails("게임오버");
+                            discord.UpdateState("점수: " + score + " @ " + RensenNegotiation.Difficulty2String(difficulty));
                         }
                         else
                         {
-                            discord.SetPresence(new RichPresence()
-                            {
-                                Details = "Oops, I'm Dead. FinalScore:" + score + " @ " + RensenNegotiation.Difficulty2String(difficulty)
-                            });
+                            discord.UpdateDetails("GAME OVER");
+                            discord.UpdateState("Score: " + score + " @ " + RensenNegotiation.Difficulty2String(difficulty));
                         }
                     }
+                    discord.Invoke();
                     for (int i = 1; i <= 10; i++)
                     {
                         Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
@@ -98,7 +134,13 @@ namespace rensenRichPresence
                     }
                     Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
                     { discordMeter.Value = 0; }));
-                    
+                   
+                } else
+                {
+
+                    if (discord != null) { discord.Dispose(); }
+                    discord = null;
+                    RensenNegotiation.wasRensenDetected = false;
                 }
             }
         }
@@ -110,7 +152,7 @@ namespace rensenRichPresence
             {
                 explainLabel.Text = "이 소프트웨어는 게임데이터를 메모리에서 읽어와\n 디스코드 RichPresence 에 연동해주는\n 프로그램입니다. - 련즐지?";
             }
-            DiscordInit();
+            DiscordSyncReq.Content = Config.Discord.discordSyncMS.ToString();
             Detector = new Thread(new ThreadStart(RensenNegotiation.Detector));
             infoUpdater = new Thread(new ThreadStart(updateInfo));
             discordUpdater = new Thread(new ThreadStart(updateInfo2Discord));
@@ -137,6 +179,9 @@ namespace rensenRichPresence
                     {
                         rensenDetected.Content = (System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ko") ? "성련선을 찾았습니다." : "Detected";
                         rensenMeter.Value = 100;
+
+
+
                         if (!RensenNegotiation.AmIDead())
                         {
                             int score = RensenNegotiation.ReadScore();
@@ -196,6 +241,7 @@ namespace rensenRichPresence
         private static IntPtr rensenHandler;
 
         public static bool isRensenDetected = false;
+        public static bool wasRensenDetected = false;
 
         public static void Detector()
         {
@@ -240,21 +286,42 @@ namespace rensenRichPresence
 
         public static String Difficulty2String(Difficulty difficulty)
         {
-            switch (difficulty)
+            if (System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ko")
             {
-                case Difficulty.EASY:
-                    return "EASY";
-                case Difficulty.NORMAL:
-                    return "NORMAL";
-                case Difficulty.HARD:
-                    return "HARD";
-                case Difficulty.LUNATIC:
-                    return "LUNATIC";
-                case Difficulty.ERROR:
-                    return "ERROR";
-                default:
-                    return "EXTRA";
+                switch (difficulty)
+                {
+                    case Difficulty.EASY:
+                        return "쉬움";
+                    case Difficulty.NORMAL:
+                        return "노말";
+                    case Difficulty.HARD:
+                        return "어려움";
+                    case Difficulty.LUNATIC:
+                        return "루나틱";
+                    case Difficulty.ERROR:
+                        return "에러";
+                    default:
+                        return "엑스트라";
+                }
+            } else
+            {
+                switch (difficulty)
+                {
+                    case Difficulty.EASY:
+                        return "EASY";
+                    case Difficulty.NORMAL:
+                        return "NORMAL";
+                    case Difficulty.HARD:
+                        return "HARD";
+                    case Difficulty.LUNATIC:
+                        return "LUNATIC";
+                    case Difficulty.ERROR:
+                        return "ERROR";
+                    default:
+                        return "EXTRA";
+                }
             }
+            
         }
 
         public static int ReadLifes()

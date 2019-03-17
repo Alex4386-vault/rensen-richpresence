@@ -11,7 +11,7 @@ namespace rensenRichPresence
         public static class Discord
         {
             public static String clientId = "556472244013105153";
-            public static int discordSyncMS = 750;
+            public static int discordSyncMS = 20000;
         }
         public static class Variables
         {
