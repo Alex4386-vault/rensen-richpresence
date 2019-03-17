@@ -151,6 +151,8 @@ namespace rensenRichPresence
             if (System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ko")
             {
                 explainLabel.Text = "이 소프트웨어는 게임데이터를 메모리에서 읽어와\n 디스코드 RichPresence 에 연동해주는\n 프로그램입니다. - 련즐지?";
+                realtimeExplain.Content = "<- 실시간";
+                stableExplain.Content = "안정적임 ->";
             }
             DiscordSyncReq.Content = Config.Discord.discordSyncMS.ToString();
             Detector = new Thread(new ThreadStart(RensenNegotiation.Detector));
@@ -225,6 +227,13 @@ namespace rensenRichPresence
                 }
                 Thread.Sleep(100);
             }
+        }
+
+        private void DiscordSyncSetter_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            DiscordSyncReq.Content = (int)discordSyncSetter.Value;
+            Config.Discord.discordSyncMS = (int)discordSyncSetter.Value;
+
         }
     }
 
