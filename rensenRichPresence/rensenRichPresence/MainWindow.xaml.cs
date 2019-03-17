@@ -130,6 +130,10 @@ namespace rensenRichPresence
                     {
                         Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
                         { discordMeter.Value = i/10; }));
+                        if (!RensenNegotiation.isRensenDetected)
+                        {
+                            break;
+                        }
                         Thread.Sleep(Config.Discord.discordSyncMS/1000);
                     }
                     Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
