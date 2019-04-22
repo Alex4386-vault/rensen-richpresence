@@ -11,7 +11,7 @@ This software reads `score`, `level (easy, normal, hard, lunatic)`, `spellcards`
 ### Warning!
 As declared in **How does it work** Section, It directly accesses memory of game software. which means **It can trigger Anti-Cheat Program** of online games or etc. (e.g. League of Legends (from Riot games) \[I can prove this because i am literally perm-banned by playing LOL while programming this!\])  
   
-Please **DO NOT LAUNCH THIS PROGRAM IF ANY ANTI-CHEAT PROGRAMS ARE RUNNING**. I **WILL NOT** provide any support for anti-cheat program or online game issues.
+Please **DO NOT LAUNCH THIS PROGRAM WHILE ANY ANTI-CHEAT PROGRAMS ARE RUNNING**. I **WILL NOT** provide any support for anti-cheat program or online game issues.
 
 ### OK, I get it. So how can i use it.
 [Screenshots TBD]  
