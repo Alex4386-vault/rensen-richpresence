@@ -25,8 +25,6 @@ Please **DO NOT LAUNCH THIS PROGRAM WHILE ANY ANTI-CHEAT PROGRAMS ARE RUNNING**.
 Since the rate-limit and several limitations of rich-presence, I recommend creating your application and update the client-id.  
 You can do those via [Discord Developer Portal](https://discordapp.com/developers).  
 
-### Warning!
-
 ### Acknowledgements
 This software uses [Lachee's discord RPC Library for C#](https://github.com/Lachee/discord-rpc-csharp), Score reading mechanics were highly inspired by [rensenware](https://github.com/0x00000FF/rensenware-cut)
 
