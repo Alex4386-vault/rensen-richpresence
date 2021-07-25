@@ -4,7 +4,7 @@ Unofficial Discord Rich Presence Implementation of Touhou Project Unidentified F
 ## English
 Implementation of Discord Rich Presence for Touhou Project 12: Unidentified Fantastic Object.  
   
-### How does it works?
+### How does it work?
 This program uses kernel32.dll's OpenProcess and ReadProcessMemory to read the data in game software itself. (Same programmatical approach with [rensenware](https://github.com/0x00000FF/rensenware-cut))  
 This software reads `score`, `level (easy, normal, hard, lunatic)`, `spellcards`, `power`, `life` from the game and forward those data into discord richpresence every 20000ms (you can change that in Config.cs, but discord RichPresence has a rate-limit.)
 
